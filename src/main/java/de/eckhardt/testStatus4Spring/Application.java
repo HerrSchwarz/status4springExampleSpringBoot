@@ -3,8 +3,6 @@ package de.eckhardt.testStatus4Spring;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
-import org.springframework.core.io.ClassPathResource;
-import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 
 import java.util.Arrays;
 
@@ -20,16 +18,7 @@ public class Application {
         Arrays.sort(beanNames);
         for (String beanName : beanNames) {
             System.out.println(beanName);
-            if ("thymeleafViewResolver".equals(beanName)) {
-                ThymeleafViewResolver resolver = (ThymeleafViewResolver) ctx.getBean(beanName);
-                for (String name : resolver.getViewNames()) {
-                    System.out.println("View Name --> " + name);
-                }
-            }
         }
-
-        ClassPathResource templates = new ClassPathResource("/templates/status.html");
-        System.out.println("/templates/status.html exists on classpath: " + templates.exists());
     }
 
 }
