@@ -3,6 +3,8 @@ package de.eckhardt.testStatus4Spring;
 import com.github.herrschwarz.status4spring.StatusController;
 import com.github.herrschwarz.status4spring.inspectors.HostInspector;
 import com.google.common.collect.ImmutableMap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +18,8 @@ import java.util.Map;
 @EnableWebMvc
 public class WebMvcConfiguration {
 
+  @Autowired
+  private CacheManager cacheManager;
 
   @Bean
   public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
@@ -39,6 +43,7 @@ public class WebMvcConfiguration {
     statusController.setCustomHeaderEntries(customHeaderEntries());
     statusController.setPageTitle("Application status");
     statusController.setSessionEnabled(true);
+    statusController.setCacheManager(cacheManager);
     return statusController;
   }
 
@@ -48,6 +53,7 @@ public class WebMvcConfiguration {
   }
 
   private Map customHeaderEntries() {
-    return ImmutableMap.of("FillSession", "/internal/testSessionAttribute?name=test&value=42");
+    return ImmutableMap.of("Fill session", "/internal/testSessionAttribute?name=test&value=42",
+            "Cached request", "/internal/testCache", "Cached request 2", "/internal/testCache2");
   }
 }

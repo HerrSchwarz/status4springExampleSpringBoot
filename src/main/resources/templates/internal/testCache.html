@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <title>Session filled</title>
+    <title>Cache Test</title>
     <link rel="stylesheet" type="text/css"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -12,6 +12,8 @@
   <th:block>
     <div th:include="header :: header"/>
   </th:block>
-  <div class="container">Session filled. Edit the URL Parameter to set more Session Attributes.</div>
+
+  <div class="container">This call should be cached. First call should be ~5000ms. The Response should be cached and a reload should happen
+  immediately. After calling this page the Cache will be visible in the Cache tab.</div>
   </body>
 </html>
