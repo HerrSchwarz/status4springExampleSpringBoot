@@ -17,7 +17,7 @@ public class TestController {
 
     @Cacheable("testCache")
     @RequestMapping(value = "/internal/testCache")
-    public void testCache() {
+    public void testCache(@RequestParam String cacheEntry) {
         try {
             Thread.sleep(5000L);
         } catch (InterruptedException e) {
@@ -28,7 +28,7 @@ public class TestController {
 
     @Cacheable("testCache2")
     @RequestMapping(value = "/internal/testCache2")
-    public String testCache2() {
+    public String testCache2(@RequestParam String cacheEntry) {
         try {
             Thread.sleep(5000L);
         } catch (InterruptedException e) {

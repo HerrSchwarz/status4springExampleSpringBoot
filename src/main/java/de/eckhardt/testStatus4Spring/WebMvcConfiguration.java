@@ -1,10 +1,12 @@
 package de.eckhardt.testStatus4Spring;
 
 import com.github.herrschwarz.status4spring.StatusController;
+import com.github.herrschwarz.status4spring.cache.ConcurrentMapCacheStatsProvider;
 import com.github.herrschwarz.status4spring.inspectors.HostInspector;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,7 +45,9 @@ public class WebMvcConfiguration {
     statusController.setCustomHeaderEntries(customHeaderEntries());
     statusController.setPageTitle("Application status");
     statusController.setSessionEnabled(true);
-    statusController.setCacheManager(cacheManager);
+    ConcurrentMapCacheStatsProvider cacheStatsProvider =
+            new ConcurrentMapCacheStatsProvider((ConcurrentMapCacheManager) cacheManager);
+    statusController.setCacheStatsProvider(cacheStatsProvider);
     return statusController;
   }
 
@@ -54,6 +58,6 @@ public class WebMvcConfiguration {
 
   private Map customHeaderEntries() {
     return ImmutableMap.of("Fill session", "/internal/testSessionAttribute?name=test&value=42",
-            "Cached request", "/internal/testCache", "Cached request 2", "/internal/testCache2");
+            "Cached request", "/internal/testCache?cacheEntry=3", "Cached request 2", "/internal/testCache2?cacheEntry=4");
   }
 }
