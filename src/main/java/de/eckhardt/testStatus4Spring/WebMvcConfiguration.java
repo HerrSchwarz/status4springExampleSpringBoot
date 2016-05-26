@@ -1,12 +1,11 @@
 package de.eckhardt.testStatus4Spring;
 
 import com.github.herrschwarz.status4spring.StatusController;
-import com.github.herrschwarz.status4spring.cache.ConcurrentMapCacheStatsProvider;
+import com.github.herrschwarz.status4spring.cache.GuavaCacheStatsProvider;
 import com.github.herrschwarz.status4spring.inspectors.HostInspector;
 import com.google.common.collect.ImmutableMap;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
+import org.springframework.cache.guava.GuavaCacheManager;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,12 +15,19 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.Map;
 
+import static com.google.common.cache.CacheBuilder.newBuilder;
+import static java.util.concurrent.TimeUnit.MINUTES;
+
 @Configuration
 @EnableWebMvc
 public class WebMvcConfiguration {
 
-  @Autowired
-  private CacheManager cacheManager;
+  @Bean
+  public CacheManager cacheManager() {
+    GuavaCacheManager guavaCacheManager =  new GuavaCacheManager();
+    guavaCacheManager.setCacheBuilder(newBuilder().recordStats().expireAfterAccess(30, MINUTES));
+    return guavaCacheManager;
+  }
 
   @Bean
   public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
@@ -45,8 +51,8 @@ public class WebMvcConfiguration {
     statusController.setCustomHeaderEntries(customHeaderEntries());
     statusController.setPageTitle("Application status");
     statusController.setSessionEnabled(true);
-    ConcurrentMapCacheStatsProvider cacheStatsProvider =
-            new ConcurrentMapCacheStatsProvider((ConcurrentMapCacheManager) cacheManager);
+    GuavaCacheStatsProvider cacheStatsProvider =
+            new GuavaCacheStatsProvider((GuavaCacheManager) cacheManager());
     statusController.setCacheStatsProvider(cacheStatsProvider);
     return statusController;
   }
