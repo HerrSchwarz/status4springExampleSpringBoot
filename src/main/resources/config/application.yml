@@ -1,0 +1,7 @@
+spring:
+  profile: default
+  cacheDelay: 5000
+---
+spring:
+  profile: fast
+  cacheDelay: 1000

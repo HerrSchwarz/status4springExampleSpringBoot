@@ -13,7 +13,8 @@
     <div th:include="header :: header"/>
   </th:block>
 
-  <div class="container">This call should be cached. First call should be ~5000ms. The Response should be cached and a reload should happen
-  immediately. After calling this page the Cache will be visible in the Cache tab. To create more entries in the cache please edit the cacheEntry parameter</div>
+  <div class="container">This call should be cached. First call should be ~<span th:text="${cacheDelay}">delay</span> The Response should be cached and a reload should happen
+  immediately. After calling this page the Cache will be visible in the Cache tab. To create more entries in the cache please edit the cacheEntry parameter.</div>
+  <div class="container">If you would like to make the cache delay shorter, please start the app with the fast profile ('mvn spring-boot:run -P fast)</div>
   </body>
 </html>
